@@ -1,0 +1,33 @@
+version: "2"
+services:
+    data:
+        build: builds/data
+        volumes:
+          - ./var/mysql:/var/lib/mysql
+          - ./var/elasticsearch:/usr/share/elasticsearch/data
+    mysql:
+        image: mysql:5.7
+        environment:
+            - MYSQL_ROOT_PASSWORD=developer
+        ports:
+            - "13306:3306"
+        volumes_from:
+            - data
+    elasticsearch:
+        build: builds/elasticsearch
+        ports:
+            - "19200:9200"
+        volumes_from:
+            - data
+    redis:
+        image: redis:3.2-alpine
+    laravel:
+        build: builds/laravel
+        ports:
+            - "8010:80"
+        links:
+            - "mysql:mysql.local"
+            - "redis:redis.local"
+            - "elasticsearch:elasticsearch.local"
+        volumes:
+            - ./laravel:/var/www/laravel
