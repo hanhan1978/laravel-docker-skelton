@@ -30,4 +30,4 @@ services:
             - "redis:redis.local"
             - "elasticsearch:elasticsearch.local"
         volumes:
-            - ./laravel:/var/www/laravel
+            - ./site:/var/www/laravel
